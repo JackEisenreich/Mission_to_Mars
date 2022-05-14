@@ -131,74 +131,50 @@ def mars_facts():
     return df.to_html(classes="table table-striped")
 
 def hemispheres(browser):
-    
-    executable_path = {'executable_path': ChromeDriverManager().install()}
-    browser = Browser('chrome', **executable_path, headless=False)
-    
-    # 1. Use browser to visit the URL 
-    url2 = 'https://marshemispheres.com/'
+    url = 'https://marshemispheres.com/'
 
-    browser.visit(url2)
+    browser.visit(url + 'index.html')
 
-
-
-    # 2. Create a list to hold the images and titles.
+    # Click the link, find the sample anchor, return the href
     hemisphere_image_urls = []
-    
-    # 3. Write code to retrieve the image urls and titles for each hemisphere.
-
-    html2 = browser.html
-    img_soup = soup(html2, 'html.parser')
-
-    results = img_soup.find_all('div',class_="description")
-    #img_url2 = f'https://marshemispheres.com/{img_url_rel2}'
-    # hemisphere_image_urls
-    results
-    for result in results:
-        
-        
-        h3 = result.find('h3').text
-        #links.append(h3)
-        
-        link = result.find('a')
-        href = link['href']
-        img_url2 = f'https://marshemispheres.com/{href}'
-        browser.visit(img_url2)
-        html4 = browser.html
-        img_soup4 = soup(html4, 'html.parser')
-        results = img_soup4.find('div', class_='downloads')
-        li = results.find('li')
-        link =li.find('a')
-        href = link['href']
-        img_url = f'{url2}{href}'
-        #hemisphere_image_urls.append(img_url)
-        
-        hemispheres = {'image_url':img_url, 'title':h3}
-        hemisphere_image_urls.append(hemispheres)
+    for i in range(4):
+        # Find the elements on each loop to avoid a stale element exception
+        browser.find_by_css("a.product-item img")[i].click()
+        hemi_data = scrape_hemisphere(browser.html)
+        hemi_data['img_url'] = url + hemi_data['img_url']
+        # Append hemisphere object to list
+        hemisphere_image_urls.append(hemi_data)
+        # Finally, we navigate backwards
         browser.back()
+
     return hemisphere_image_urls
 
-    
 
-        
+def scrape_hemisphere(html_text):
+    # parse html text
+    hemi_soup = soup(html_text, "html.parser")
 
-    # 4. Print the list that holds the dictionary of each image url and title.
-        
-        
-    #hemisphere_image_urls
-        
-        
+    # adding try/except for error handling
+    try:
+        title_elem = hemi_soup.find("h2", class_="title").get_text()
+        sample_elem = hemi_soup.find("a", text="Sample").get("href")
 
-    # 5. Quit the browser
+    except AttributeError:
+        # Image error will return None, for better front-end handling
+        title_elem = None
+        sample_elem = None
 
-    #browser.quit()
-    
+    hemispheres = {
+        "title": title_elem,
+        "img_url": sample_elem
+    }
+
+    return hemispheres
 
 if __name__ == "__main__":
 
     # If running as script, print scraped data
     print(scrape_all())
-
 
 
 
