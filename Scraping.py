@@ -173,19 +173,26 @@ def hemispheres(browser):
         img_url = f'{url2}{href}'
         #hemisphere_image_urls.append(img_url)
         
-        hemispheres = {'img_url':img_url, 'title':h3}
+        hemispheres = {'image_url':img_url, 'title':h3}
         hemisphere_image_urls.append(hemispheres)
-        
+        browser.back()
+    return hemisphere_image_urls
 
     
 
-
+        
 
     # 4. Print the list that holds the dictionary of each image url and title.
-        browser.back()
+        
+        
+    #hemisphere_image_urls
+        
+        
 
     # 5. Quit the browser
-    return hemisphere_image_urls
+
+    #browser.quit()
+    
 
 if __name__ == "__main__":
 

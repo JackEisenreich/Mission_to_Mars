@@ -189,7 +189,7 @@ for result in results:
         img_url = f'{url2}{href}'
         #hemisphere_image_urls.append(img_url)
         
-        hemispheres = {'img_url':img_url, 'title':h3}
+        hemispheres = {'image_url':img_url, 'title':h3}
         hemisphere_image_urls.append(hemispheres)
         
 
@@ -197,7 +197,7 @@ for result in results:
 
 
 
-hemisphere_image_urls
+#hemisphere_image_urls
 
 
 # In[ ]:
@@ -210,7 +210,7 @@ hemisphere_image_urls
 
 
 # 4. Print the list that holds the dictionary of each image url and title.
-hemisphere_image_urls
+#hemisphere_image_urls
 
 
 # In[19]:
